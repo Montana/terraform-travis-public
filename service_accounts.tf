@@ -31,11 +31,11 @@ data "terraform_remote_state" "production_3" {
   }
 }
 
-resource "google_project_iam_member" "staging_1_workers" {
-  count   = "${length(data.terraform_remote_state.staging_1.workers_service_account_emails)}"
+resource "google_project_iam_member" "staging_2_workers" {
+  count   = "${length(data.terraform_remote_state.staging_2.workers_service_account_emails)}"
   project = "${var.project}"
   role    = "roles/compute.imageUser"
-  member  = "serviceAccount:${element(data.terraform_remote_state.staging_1.workers_service_account_emails, count.index)}"
+  member  = "serviceAccount:${element(data.terraform_remote_state.staging_2.workers_service_account_emails, count.index)}"
 }
 
 resource "google_project_iam_member" "production_2_workers" {
