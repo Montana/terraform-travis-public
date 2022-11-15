@@ -1,2 +1,2 @@
 # terraform-travis
-Terraform policies with Chirp
+Terraform policies with Chirp for Travis CI.
