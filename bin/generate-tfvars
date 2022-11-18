@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -o errexit
+
+main() {
+  local top
+  top="$(git rev-parse --show-toplevel)"
+  local out="${1}"
+  if [[ "${out}" ]]; then
+    exec 1>"${out}"
+  fi
+
+  if ! "${top}/bin/generate-github-ssh-users"; then
+    __cleanup "${out}"
+    exit 1
+  fi
+
+  if ! "${top}/bin/generate-latest-docker-image-tags"; then
+    __cleanup "${out}"
+    exit 1
+  fi
+
+  if ! "${top}/bin/generate-latest-worker-version"; then
+    __cleanup "${out}"
+    exit 1
+  fi
+
+  if ! "${top}/bin/generate-latest-gce-images"; then
+    __cleanup "${out}"
+    exit 1
+  fi
+}
+
+__cleanup() {
+  if [[ "${1}" && -f "${1}" ]]; then
+    rm -f "${1}"
+  fi
+}
+
+main "$@"
